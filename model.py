@@ -67,29 +67,36 @@ def rightFace(x, y, z):
     fs.append( (vs.index(current), vs.index(up_right), vs.index(up)) )
     fs.append( (vs.index(current), vs.index(right), vs.index(up_right)) )
 
-
 def topFace(x, y, z):
     current = (x, y, z)
-    up = (x, y, z)
-    right = (x, y+1, z)
-    up_right = (x, y+1, z+1)
+    up = (x, y+1, z)
+    left = (x+1, y, z)
+    up_left = (x+1, y+1, z)
+    fs.append( (vs.index(current), vs.index(up_left), vs.index(up)) )
+    fs.append( (vs.index(current), vs.index(left), vs.index(up_left)) )
 
-    fs.append( (vs.index(current), vs.index(up_right), vs.index(up)) )
-    fs.append( (vs.index(current), vs.index(right), vs.index(up_right)) )
+def bottomFace(x, y, z):
+    current = (x, y, z)
+    up = (x, y+1, z)
+    left = (x+1, y, z)
+    up_left = (x+1, y+1, z)
+    fs.append( (vs.index(current), vs.index(up), vs.index(up_left)) )
+    fs.append( (vs.index(current), vs.index(up_left), vs.index(left)) )
 
-# bottom faces
+
+# front bottom faces
 for x in range(6):
     for z in [0, 1]:
         backFace(x, 2, z)
         frontFace(x, 0, z)
 
-# middle faces
+# front middle faces
 for x in [2, 3]: 
     for z in [2, 3, 4, 5]:
         backFace(x, 2, z)
         frontFace(x, 0, z)
 
-# top faces
+# front top faces
 for x in range(6):
     for z in [6, 7]:
         backFace(x, 2, z)
@@ -105,6 +112,17 @@ for y in [0, 1]:
     for z in [2, 3, 4, 5]:
         leftFace(2, y, z)
         rightFace(4, y, z)
+
+# top/bottom faces
+for x in [0, 1, 2, 3, 4, 5]:
+    for y in [0, 1]:
+        topFace(x, y, 8)
+        bottomFace(x, y, 0)
+
+for x in [0, 1, 4, 5]:
+    for y in [0, 1]:
+        topFace(x, y, 2)
+        bottomFace(x, y, 6)
 
 
 for (x, y, z) in vs:

@@ -78,13 +78,13 @@ void display(void)
 
     // draw other stuff
     glBegin(GL_QUADS);
-        float width = 25.f;
+        float width = 10.f;
         glNormal3f(0.0, 0.0, 1.0);
         glVertex3f(width, width, 0.0);
         glVertex3f(width, -width, 0.0);
         glVertex3f(-width, -width, 0.0);
         glVertex3f(-width, width, 0.0);
-    glEnd(/*GL_QUADS*/);
+    glEnd(); // GL_QUADS
 
     glPopMatrix ();
 
