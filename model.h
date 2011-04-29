@@ -19,12 +19,9 @@ class Model{
         GLuint texture;
         GLuint mixture;
         GLuint env;
+        void computeNormals();
     public:
         Model(string filename);
-        void computeNormals();
-        void setTexture(string filename, bool wrap);
-        void setMixture(string filename, bool wrap);
-        void setEnv(string filename);
-        void render(int shader_program, bool showNormals);
+        void render();
 };
 #endif
