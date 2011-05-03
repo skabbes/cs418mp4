@@ -13,15 +13,22 @@ using namespace gfx;
 
 class Model{
     private:
-        vector<Vec3f> verticies;
-        vector<Vec3f> normals;
-        vector<Vec3i> faces;
-        GLuint texture;
-        GLuint mixture;
-        GLuint env;
+        vector<Vec3> verticies;
+        vector<Vec3> normals;
+        vector< vector<int> > faces;
+
+        vector< vector<int> > springs;
+        vector< vector<double> > springDistances;
+
+        vector<Vec3> forces;
+        vector<Vec3> velocities;
+
+        void applyForces(double time);
         void computeNormals();
     public:
         Model(string filename);
-        void render();
+        void render(double time, int how);
+        void translate(int x, int y, int z);
+        Vec3 centroid();
 };
 #endif

@@ -2,3 +2,14 @@
  CS418 University of Illinois MP4
  Steven Kabbes :: skabbes2
 ===============================================================================
+The block I is a particle system with damping with gravity and wind (so
+that the I falls over), shown over a cubic bezier curve meant to 
+follow the I's path to the ground.
+
+To compile the code, simply run make, to run execute ./mp4.
+
+Also, there are some options to visualize the springs
+    'n' -> returns the simulation to normal mode
+    'b' -> visualizes the springs as balls
+    's' -> visualizes the springs with various colored lines
+           based on how much that spring is compressed or stretched

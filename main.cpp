@@ -15,11 +15,50 @@
 
 using namespace gfx;
 
-Model teapot("I.obj");
+Model blockI("I.obj");
+
+int bezier[][3] = { 
+    {10, 10, 2},
+    {10, 20, 5},
+    {0, -10, 10},
+    {8, 0, 2}
+};
+
+int showSprings = 0;
+
+Vec3 computeBezier(double time){
+    while( time > 15 ) time -= 15;
+    time /= 15;
+
+    Vec3 camera;
+    int i = (int)time;
+    double t = time - (int)(time);
+    double t1 = 1-t;
+
+    double b[] = 
+    {
+        t1 * t1 * t1,
+        3 * t1 * t1 * t,
+        3 * t1 * t * t,
+        t * t * t
+    };
+
+
+    for(int j=0;j<4;j++){
+        camera[0] += bezier[j][0] * b[j];
+        camera[1] += bezier[j][1] * b[j];
+        camera[2] += bezier[j][2] * b[j];
+    }
+    return camera;
+}
 
 void init(void) 
 {
-    printf("Welcome to the Teapot Demo\n");
+    printf("Welcome to the Block I particle system\n");
+    printf("\tpress 'b' to visualize springs with balls\n");
+    printf("\tpress 's' to visualize springs with colored lines\n");
+    printf("\tpress 'n' to return to normal mode\n");
+    blockI.translate(0,0,5);
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -48,17 +87,17 @@ void display(void)
     glLoadIdentity ();
 
     glPushMatrix ();
-    gluLookAt (0.0, 6.0, 2.0, 0.0, 0.0, 2.0, 0.0, 0.0, 1.0);
+    Vec3 centroid = blockI.centroid();
+    Vec3 camera = computeBezier(time / 1000.0);
+
+    gluLookAt (camera[0], camera[1], camera[2], centroid[0], centroid[1], centroid[2], 0.0, 0.0, 1.0);
+    //gluLookAt (camera[0], camera[1], camera[2], 0, 0, 0, 0.0, 0.0, 1.0);
 
     glPushMatrix ();
     glLightfv (GL_LIGHT0, GL_POSITION, position);
     glPopMatrix ();
 
-    glRotatef((int)(time/50) % 360 , 0, 0, 1);
-
     glPushMatrix();
-    glScalef(.5, .5, .5);
-    glTranslatef(-3.0, -1.0, 0.0);
 
 	GLfloat tanamb[] = {0.2,0.15,0.1,1.0};
 	GLfloat tandiff[] = {0.4,0.3,0.2,1.0};
@@ -67,7 +106,8 @@ void display(void)
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, tandiff);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10.0);
 
-    teapot.render();
+    blockI.render( secondsElapsed, showSprings );
+
     glPopMatrix();
 
 	GLfloat flooramb[] = {0.2,0.0,0.0,1.0};
@@ -78,7 +118,7 @@ void display(void)
 
     // draw other stuff
     glBegin(GL_QUADS);
-        float width = 10.f;
+        float width = 20.f;
         glNormal3f(0.0, 0.0, 1.0);
         glVertex3f(width, width, 0.0);
         glVertex3f(width, -width, 0.0);
@@ -124,7 +164,14 @@ void arrows(int key, int x, int y){
 void keyboard(unsigned char key, int x, int y)
 {
    switch (key) {
+        case 's':
+            showSprings = 2;
+            break;
+        case 'b':
+            showSprings = 1;
+            break;
         case 'n':
+            showSprings = 0;
             break;
         case 27:
             exit(0);
